@@ -18,7 +18,7 @@ Microservice-ready backend design
 
 ## Database
 
-* PostgreSQ
+* PostgreSQL
 
 # Configuration
 
