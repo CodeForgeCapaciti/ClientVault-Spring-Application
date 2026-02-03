@@ -42,6 +42,9 @@ public class ClientService {
 
     //To update the Client
     public Client updateClient(Client client){
+        if (!clientRepo.existsById(client.getId())){
+            throw new RuntimeException("Client with ID Number: " + client.getId()+ "Not found");
+        }
         return clientRepo.save(client);
     }
 
