@@ -20,4 +20,9 @@ public final ClientRepo clientRepo;
         return clientRepo.save(client);
     }
 
+    //To update the Client
+    public Client updateClient(Client client){
+        return clientRepo.save(client);
+    }
+
 }
