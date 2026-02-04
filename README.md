@@ -46,10 +46,19 @@ http://localhost:8080
 # Create Client
 * POST /clients/add
 * Adds a new line to the database
+* http://localhost:8080/api/clients
+* Example input: {
+  "clientId": "C115",
+  "fullName": "Teabo",
+  "email": "Teaboabo@gmail.com",
+  "phoneNumber": "0631177632",
+  "address": "623 Joburg street"
+  }
 
 # Get All Clients
 * GET /clients/all
 * Retrieves a list of all clients in the database
+* http://localhost:8080/api/clients
 
 # Get Client by ID
 * GET /clients/{id}
@@ -62,3 +71,4 @@ http://localhost:8080
 # Delete Client
 * DELETE /clients/delete/{id}
 * Deletes a client by its database ID
+* http://localhost:8080/api/clients/{id}
