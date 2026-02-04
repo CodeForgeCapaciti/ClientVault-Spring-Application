@@ -21,7 +21,7 @@ public class ClientController {
     //for managing Client records in the database
 
     // CREATE
-    @PostMapping
+    @PostMapping("add")
     public ResponseEntity<Client> createClient(@RequestBody Client client){
         Client savedClient = clientService.createClient(client);
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
@@ -61,7 +61,7 @@ public class ClientController {
     }
 
     // DELETE by DB ID
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteClient(@PathVariable("id") Long clientId){
         Client client = clientService.getClientById(clientId);
         clientService.deleteClient(client);
