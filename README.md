@@ -38,3 +38,27 @@ mvn spring-boot:run
 
 Access the Application
 http://localhost:8080
+
+# CRUD Endpoints
+* All endpoints are prefixed with
+* http://localhost:8080/clients
+
+# CREATE Client
+* POST /clients/add
+* Adds a new line to the database
+
+# GET All Clients
+* GET /clients/all
+* Retrieves a list of all clients in the database
+
+# Get Client by ID
+* GET /clients/{id}
+* Retrieves a single client using its database ID 
+
+# Update Client
+* PUT /clients/update/{id}
+*  Updates an existing client's information
+
+# Delete Client
+* DELETE /clients/delete/{id}
+* Deletes a client by its database ID
