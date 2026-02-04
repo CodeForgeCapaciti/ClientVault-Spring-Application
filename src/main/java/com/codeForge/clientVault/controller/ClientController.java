@@ -21,10 +21,18 @@ public class ClientController {
     //for managing Client records in the database
 
     // CREATE
-
+    @PostMapping
+    public ResponseEntity<Client> createClient(@RequestBody Client client){
+        Client savedClient = clientService.createClient(client);
+        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
+    }
 
     //GET ALL
-
+    @GetMapping
+    public ResponseEntity<List<Client>> getAllClients(){
+        List<Client> clients = clientService.getAllClients();
+        return ResponseEntity.ok(clients);
+    }
 
     //GET by DB ID
     @GetMapping("/{id}")
