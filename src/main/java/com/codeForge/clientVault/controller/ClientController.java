@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("clients")
 public class ClientController {
     private final ClientService clientService;
 
@@ -28,7 +28,7 @@ public class ClientController {
     }
 
     //GET ALL
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<List<Client>> getAllClients(){
         List<Client> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
@@ -41,7 +41,7 @@ public class ClientController {
     }
 
     //UPDATE by DB ID
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<Client> updateClient( @PathVariable Long id,
             @RequestBody Client updatedClient) {
 
