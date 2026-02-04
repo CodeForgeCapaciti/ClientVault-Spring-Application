@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("clients")
+@RequestMapping("/clients")
 public class ClientController {
     private final ClientService clientService;
 
@@ -21,14 +21,14 @@ public class ClientController {
     //for managing Client records in the database
 
     // CREATE
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResponseEntity<Client> createClient(@RequestBody Client client){
         Client savedClient = clientService.createClient(client);
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
     //GET ALL
-    @GetMapping("all")
+    @GetMapping("/all")
     public ResponseEntity<List<Client>> getAllClients(){
         List<Client> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
