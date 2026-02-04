@@ -44,21 +44,33 @@ http://localhost:8080
 * http://localhost:8080/clients
 
 # Create Client
-* POST /clients/add
-* Adds a new line to the database
+* POST 
+* http://localhost:8080/clients/add
+* Adds a new line to the database 
+* {
+  "clientId": "C117",
+  "fullName": "Thabo Nkosi",
+  "email": "thabo.nkosi@gmail.com",
+  "phoneNumber": "0829876543",
+  "address": "braam"
+  }
 
 # Get All Clients
-* GET /clients/all
+* GET 
+* http://localhost:8080/clients/all
 * Retrieves a list of all clients in the database
 
 # Get Client by ID
-* GET /clients/{id}
+* GET 
+* http://localhost:8080/clients/{id}
 * Retrieves a single client using its database ID 
 
 # Update Client
-* PUT /clients/update/{id}
+* PUT 
+* http://localhost:8080/clients/update/{id}
 *  Updates an existing client's information
 
 # Delete Client
-* DELETE /clients/delete/{id}
+* DELETE 
+* http://localhost:8080/clients/delete/{id}
 * Deletes a client by its database ID
