@@ -43,11 +43,11 @@ http://localhost:8080
 * All endpoints are prefixed with
 * http://localhost:8080/clients
 
-# CREATE Client
+# Create Client
 * POST /clients/add
 * Adds a new line to the database
 
-# GET All Clients
+# Get All Clients
 * GET /clients/all
 * Retrieves a list of all clients in the database
 
