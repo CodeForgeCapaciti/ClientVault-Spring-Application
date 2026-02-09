@@ -7,40 +7,41 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/CodeForgeCapaciti/ClientVault-Spring-Application.git'
+                git branch: 'main',
+                    url: 'https://github.com/CodeForgeCapaciti/ClientVault-Spring-Application.git'
             }
         }
 
-        stage('Build JAR') {
+        stage('Build & Test') {
             steps {
-                echo "Building Spring Boot application..."
+                echo "Building and testing Spring Boot application..."
+                sh 'mvn clean test'
+            }
+        }
+
+        stage('Package JAR') {
+            steps {
+                echo "Packaging JAR..."
                 sh 'mvn clean package -DskipTests'
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                echo "Running unit tests..."
-                sh 'mvn test'
             }
         }
 
         stage('Docker Build') {
             steps {
                 echo "Building Docker image..."
-                sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
             }
         }
 
-        stage('Docker Compose Up') {
+        stage('Docker Compose Deploy') {
             steps {
-                echo "Deploying containers with Docker Compose..."
+                echo "Starting application with Docker Compose..."
                 sh '''
-                  # Ensure Postgres container is healthy before starting app
+                  docker-compose down
                   docker-compose up -d --build
-                  sleep 10
                 '''
             }
         }
@@ -48,10 +49,10 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline succeeded!"
+            echo "✅ Jenkins Pipeline succeeded!"
         }
         failure {
-            echo "Pipeline failed!"
+            echo "❌ Jenkins Pipeline failed!"
         }
     }
 }
