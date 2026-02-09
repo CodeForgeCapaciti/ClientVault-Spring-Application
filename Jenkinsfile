@@ -15,10 +15,29 @@ pipeline {
             }
         }
 
+        stage('Docker Compose Up for Tests') {
+            steps {
+                echo "Starting Postgres for tests..."
+                sh '''
+                  docker-compose -f docker-compose.yml up -d postgres
+                  # Wait until Postgres is healthy
+                  until [ "$(docker inspect -f '{{.State.Health.Status}}' clientvault-db)" == "healthy" ]; do
+                    echo "Waiting for Postgres..."
+                    sleep 2
+                  done
+                '''
+            }
+        }
+
         stage('Build & Test') {
             steps {
                 echo "Building and testing Spring Boot application..."
-                sh 'mvn clean test'
+                sh '''
+                  mvn clean test \
+                    -Dspring.datasource.url=jdbc:postgresql://localhost:5433/client_vault \
+                    -Dspring.datasource.username=postgres \
+                    -Dspring.datasource.password="#Brayden1@"
+                '''
             }
         }
 
@@ -29,17 +48,11 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Build & Deploy') {
             steps {
-                echo "Building Docker image..."
-                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
-            }
-        }
-
-        stage('Docker Compose Deploy') {
-            steps {
-                echo "Starting application with Docker Compose..."
+                echo "Building Docker image and deploying app..."
                 sh '''
+                  docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                   docker-compose down
                   docker-compose up -d --build
                 '''
