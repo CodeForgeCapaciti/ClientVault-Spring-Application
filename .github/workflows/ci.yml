@@ -1,0 +1,254 @@
+# .github/workflows/ci-cd.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggers
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  DOCKERHUB_IMAGE: durksie/clientvault-app  # Change to YOUR Docker Hub username
+
+jobs:
+  # JOB 1: Build and Test
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: clientvault_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres123
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build application
+        run: mvn clean compile
+
+      - name: Run unit tests
+        run: mvn test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/clientvault_db
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: "#Brayden1@"
+
+      - name: Package JAR
+        run: mvn package -DskipTests
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: application-jar
+          path: target/*.jar
+          retention-days: 7
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: target/surefire-reports/
+          retention-days: 30
+
+  # JOB 2: Build and Push Docker Image
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_IMAGE }}
+            ghcr.io/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha,prefix=
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Docker image vulnerability scan
+        run: |
+          docker scan ${{ env.DOCKERHUB_IMAGE }}:latest
+
+      - name: Update deployment info
+        run: |
+          echo "🚀 Docker Images Published Successfully!"
+          echo "Docker Hub: ${{ env.DOCKERHUB_IMAGE }}:latest"
+          echo "GitHub Container Registry: ghcr.io/${{ env.IMAGE_NAME }}:latest"
+          echo "Commit SHA: ${{ github.sha }}"
+
+  # JOB 3: Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy with Docker Compose
+        run: |
+          echo "Deploying to staging environment..."
+          
+          # Stop existing containers
+          docker-compose down || true
+          
+          # Pull latest images
+          docker pull ${{ env.DOCKERHUB_IMAGE }}:latest
+          
+          # Start services
+          docker-compose up -d
+          
+          echo "Waiting for services to start..."
+          sleep 30
+          
+          # Health check
+          echo "Performing health checks..."
+          curl -f http://localhost:8081/actuator/health || exit 1
+          
+          echo "✅ Deployment successful!"
+          echo "Application: http://localhost:8081"
+          echo "API Documentation: http://localhost:8081/swagger-ui.html"
+          echo "Actuator: http://localhost:8081/actuator"
+
+      - name: Run API tests
+        run: |
+          echo "Running API tests..."
+          # Add your API test commands here
+          # Example: curl tests or integration tests
+
+      - name: Notify deployment status
+        run: |
+          echo "📢 Deployment Notification"
+          echo "Project: ClientVault"
+          echo "Environment: Staging"
+          echo "Status: Success"
+          echo "URL: http://localhost:8081"
+          echo "Time: $(date)"
+
+  # JOB 4: Security Scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.DOCKERHUB_IMAGE }}:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # JOB 5: Generate Reports
+  reports:
+    name: Generate Reports
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-scan]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Generate Maven site report
+        run: mvn site -DskipTests
+
+      - name: Archive reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: maven-reports
+          path: target/site/
+          retention-days: 30
+
+# Workflow completion
+on-success:
+  run: echo "🎉 CI/CD Pipeline completed successfully!"
+
+on-failure:
+  run: echo "❌ CI/CD Pipeline failed. Please check logs."
