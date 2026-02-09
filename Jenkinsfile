@@ -20,6 +20,13 @@ pipeline {
             }
         }
 
+        stage('Run Unit Tests') {
+            steps {
+                echo "Running unit tests..."
+                sh 'mvn test'
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 echo "Building Docker image..."
@@ -29,15 +36,12 @@ pipeline {
 
         stage('Docker Compose Up') {
             steps {
-                echo "Deploying containers..."
-                sh 'docker-compose up -d --build'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                echo "Running unit tests..."
-                sh 'mvn test'
+                echo "Deploying containers with Docker Compose..."
+                sh '''
+                  # Ensure Postgres container is healthy before starting app
+                  docker-compose up -d --build
+                  sleep 10
+                '''
             }
         }
     }

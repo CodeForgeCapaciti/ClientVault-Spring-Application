@@ -35,6 +35,19 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -U postgres; then
+              echo "PostgreSQL is ready!"
+              break
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 1
+          done
+        env:
+          PGPASSWORD: "#Brayden1@"
+
       - name: Build Spring Boot JAR
         run: mvn clean package -DskipTests
 
