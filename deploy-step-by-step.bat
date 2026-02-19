@@ -57,15 +57,15 @@ kubectl get pods -n clientvault -l app=clientvault
 echo Waiting for application to be ready...
 kubectl wait --for=condition=ready pod -l app=clientvault -n clientvault --timeout=120s
 if %errorlevel% neq 0 (
-    echo Application not ready yet, waiting...
+    echo Application not ready yet, waiting.
     timeout /t 10
     goto k8s_app_check
 )
 echo.
 
-echo ========================================
+echo =================================
 echo Deployment Complete!
-echo ========================================
+echo ==================================
 echo.
 
 echo All resources in clientvault namespace:
