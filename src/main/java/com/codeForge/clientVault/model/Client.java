@@ -26,6 +26,8 @@ public class Client {
     @Column(nullable = false)
     private String address;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     // ✅ Default constructor
     public Client() {}
@@ -37,7 +39,7 @@ public class Client {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
-
+        this.createdAt = LocalDateTime.now();
     }
 
     // ✅ Getters and Setters
@@ -58,21 +60,7 @@ public class Client {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-
-
-    // to string method
-  @Override
-  public String toString() {
-      return "Client{" +
-              "id=" + id +
-              ", clientId='" + clientId + '\'' +
-              ", fullName='" + fullName + '\'' +
-              ", email='" + email + '\'' +
-              ", phoneNumber='" + phoneNumber + '\'' +
-              ", address='" + address + '\'' +
-              '}';
-  }
-
-
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
 
