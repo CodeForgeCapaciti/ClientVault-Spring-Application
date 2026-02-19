@@ -33,4 +33,3 @@ resource "kubernetes_secret" "app_secret" {
 
   type = "Opaque"
 }
-# Configure access to the target Kubernetes cluster using local kubeconfig
