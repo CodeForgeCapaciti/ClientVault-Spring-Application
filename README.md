@@ -54,33 +54,33 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ## Running the Application
 ### Prerequisites
 
-Java installed
+- Java installed
 
-Maven installed
+- Maven installed
 
-PostgreSQL running
+- PostgreSQL running
 
-Docker Installed 
+- Docker Installed 
 
 #### Run locally with Maven
-mvn spring-boot:run
+- mvn spring-boot:run
 
-Application runs at:
+- Application runs at:
 
-http://localhost:8080
- API Endpoints
+_http://localhost:8080_
+  - API Endpoints
 
-Base URL:
+- Base URL:
 
 _http://localhost:8080/clients_
 
 ### ➕ Create Client
 
-POST /add
+- POST /add
 
-Adds a new client
+- Adds a new client
 
-Example request body:
+- Example request body:
 
 ```{
   "clientId": "C115",
@@ -93,27 +93,27 @@ Example request body:
 
 ### Get All Clients
 
-GET /all
+- GET /all
 
-Returns all clients
+- Returns all clients
 
 ### Get Client by ID
 
-GET /{id}
+- GET /{id}
 
-Returns a specific client
+- Returns a specific client
 
 ###  Update Client
 
-PUT /update/{id}
+- PUT /update/{id}
 
-Updates client details
+- Updates client details
 
 ### Delete Client
 
-DELETE /delete/{id}
+- DELETE /delete/{id}
 
-Removes a client
+- Removes a client
 
 ### Running with Docker
 
@@ -121,43 +121,44 @@ Build image:
 
 _docker build -t clientvault ._
 
-Run container:
+- Run container:
 
-docker run -p 8080:8080 clientvault
+- docker run -p 8080:8080 clientvault
 
-Or use Docker Compose:
+- Or use Docker Compose:
 
-docker-compose up
-☸ Deployment
+- docker-compose up
 
-The project includes:
+### Deployment
 
-Kubernetes manifests (k8s/)
+- The project includes:
 
-Terraform scripts (terraform/)
+- Kubernetes manifests (k8s/)
 
-Jenkins pipeline (Jenkinsfile)
+- Terraform scripts (terraform/)
 
-Use these for automated infrastructure provisioning and deployment.
+- Jenkins pipeline (Jenkinsfile)
+
+- Use these for automated infrastructure provisioning and deployment.
 
 ### Testing
 
-Run tests with:
+- Run tests with:
 
-mvn test
-👥 Contributors
-
-Team members contributing to the ClientVault project.
+- mvn test
+  
+- Contributors
+ - Team members contributing to the ClientVault project.
 
 
  ## Future Improvements
 
-Add authentication (JWT / OAuth2)
+- Add authentication (JWT / OAuth2)
 
-API documentation (Swagger/OpenAPI)
+- API documentation (Swagger/OpenAPI)
 
-Validation and error handling improvements
+- Validation and error handling improvements
 
-Monitoring and logging
+- Monitoring and logging
 
-Frontend integration
+- Frontend integration
