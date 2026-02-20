@@ -1,6 +1,6 @@
 # ClientVault – Client Management Application
 
-## 📌 Overview
+## Overview
 ClientVault is a CRUD-based Client Management backend application built using Java Spring Boot.  
 It provides RESTful APIs to manage client records including creating, retrieving, updating, and deleting client information.
 
@@ -8,7 +8,7 @@ The project follows clean layered architecture principles and is designed to be 
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 - Layered architecture (Controller → Service → Repository → Database)
 - RESTful API design
 - Microservice-ready structure
@@ -17,7 +17,7 @@ The project follows clean layered architecture principles and is designed to be 
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Backend
 - Java
@@ -38,7 +38,7 @@ The project follows clean layered architecture principles and is designed to be 
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Update your `application.properties` file:
 
@@ -49,8 +49,10 @@ spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
-🚀 Running the Application
-Prerequisites
+```
+---
+## Running the Application
+### Prerequisites
 
 Java installed
 
@@ -58,20 +60,21 @@ Maven installed
 
 PostgreSQL running
 
-Docker (optional for containerized run)
+Docker Installed 
 
-Run locally with Maven
+#### Run locally with Maven
 mvn spring-boot:run
 
 Application runs at:
 
 http://localhost:8080
-📡 API Endpoints
+ API Endpoints
 
 Base URL:
 
 _http://localhost:8080/clients_
-➕ Create Client
+
+### ➕ Create Client
 
 POST /add
 
@@ -79,42 +82,44 @@ Adds a new client
 
 Example request body:
 
-{
+```{
   "clientId": "C115",
   "fullName": "John Doe",
   "email": "john@example.com",
   "phoneNumber": "0123456789",
   "address": "123 Main Street"
 }
-📋 Get All Clients
+```
+
+### Get All Clients
 
 GET /all
 
 Returns all clients
 
-🔎 Get Client by ID
+### Get Client by ID
 
 GET /{id}
 
 Returns a specific client
 
-✏️ Update Client
+###  Update Client
 
 PUT /update/{id}
 
 Updates client details
 
-🗑️ Delete Client
+### Delete Client
 
 DELETE /delete/{id}
 
 Removes a client
 
-🐳 Running with Docker
+### Running with Docker
 
 Build image:
 
-docker build -t clientvault .
+_docker build -t clientvault ._
 
 Run container:
 
@@ -123,7 +128,7 @@ docker run -p 8080:8080 clientvault
 Or use Docker Compose:
 
 docker-compose up
-☸️ Deployment
+☸ Deployment
 
 The project includes:
 
@@ -135,7 +140,7 @@ Jenkins pipeline (Jenkinsfile)
 
 Use these for automated infrastructure provisioning and deployment.
 
-🧪 Testing
+### Testing
 
 Run tests with:
 
@@ -144,11 +149,8 @@ mvn test
 
 Team members contributing to the ClientVault project.
 
-📄 License
 
-This project is intended for educational and training purposes.
-
-⭐ Future Improvements
+ ## Future Improvements
 
 Add authentication (JWT / OAuth2)
 
