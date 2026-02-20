@@ -1,77 +1,161 @@
-[# ClientVault – Client Management Application
-## Project Overview
-ClientVault is a Spring Boot–based Client Management Application designed to manage client information efficiently using a RESTful backend architecture. The application follows clean layered architecture principles and is built with Java and Spring technologies, making it suitable for enterprise-grade backend and microservice-oriented systems.
+# ClientVault – Client Management Application
 
+## 📌 Overview
+ClientVault is a CRUD-based Client Management backend application built using Java Spring Boot.  
+It provides RESTful APIs to manage client records including creating, retrieving, updating, and deleting client information.
 
-Microservice-ready backend design
-# Technology Stack
-## Backend
+The project follows clean layered architecture principles and is designed to be microservice-ready, making it suitable for enterprise backend systems and DevOps deployment workflows.
 
-* Java: 25 
-* Spring Boot: 4.0.2
+---
 
-* Spring Web
+## 🏗️ Architecture
+- Layered architecture (Controller → Service → Repository → Database)
+- RESTful API design
+- Microservice-ready structure
+- Containerized deployment support (Docker)
+- CI/CD ready (Jenkins, Kubernetes, Terraform)
 
-* Spring Data JPA 
+---
 
-* Hibernate 
+## 🛠️ Technology Stack
 
-## Database
+### Backend
+- Java
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Hibernate
 
-* PostgreSQL
+### Database
+- PostgreSQL
 
-# Configuration
+### DevOps & Infrastructure
+- Docker
+- Docker Compose
+- Jenkins
+- Kubernetes
+- Terraform
 
-## application.properties
-Database persistence using PostgreSQL
-* spring.datasource.url=jdbc:postgresql://localhost:5432/clientvault_db
-* spring.datasource.username=postgres
-* spring.datasource.password=your_password
-  
-* spring.jpa.hibernate.ddl-auto=update
-* spring.jpa.show-sql=true
-* spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+---
 
-# Running the Application
-* Run with Maven
+## ⚙️ Configuration
+
+Update your `application.properties` file:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/clientvault_db
+spring.datasource.username=postgres
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+🚀 Running the Application
+Prerequisites
+
+Java installed
+
+Maven installed
+
+PostgreSQL running
+
+Docker (optional for containerized run)
+
+Run locally with Maven
 mvn spring-boot:run
 
-Access the Application
+Application runs at:
+
 http://localhost:8080
+📡 API Endpoints
 
-# CRUD Endpoints
-* All endpoints are prefixed with
-* http://localhost:8080/clients
+Base URL:
 
-# Create Client
-* POST 
-* http://localhost:8080/clients/add
-* Adds a new line to the database
-* Example input: {
+_http://localhost:8080/clients_
+➕ Create Client
+
+POST /add
+
+Adds a new client
+
+Example request body:
+
+{
   "clientId": "C115",
-  "fullName": "Teabo",
-  "email": "Teaboabo@gmail.com",
-  "phoneNumber": "0631177632",
-  "address": "623 Joburg street"
-  }
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "phoneNumber": "0123456789",
+  "address": "123 Main Street"
+}
+📋 Get All Clients
 
-# Get All Clients
-* GET 
-* http://localhost:8080/clients/all
-* Retrieves a list of all clients in the database
+GET /all
 
-# Get Client by ID
-* GET 
-* http://localhost:8080/clients/{id}
-* Retrieves a single client using its database ID 
+Returns all clients
 
-# Update Client
-* PUT 
-* http://localhost:8080/clients/update/{id}
-*  Updates an existing client's information
+🔎 Get Client by ID
 
-# Delete Client
-* DELETE 
-* http://localhost:8080/clients/delete/{id}
-* Deletes a client by its database ID
-](https://capeitinitiative-my.sharepoint.com/:w:/g/personal/durksie_ntlemo_capaciti_org_za/IQAjhNuyMS2qRrfykTWMGdeHAcSwcapGAIcMEFW5EVlkjUA?e=ZOeNTr)
+GET /{id}
+
+Returns a specific client
+
+✏️ Update Client
+
+PUT /update/{id}
+
+Updates client details
+
+🗑️ Delete Client
+
+DELETE /delete/{id}
+
+Removes a client
+
+🐳 Running with Docker
+
+Build image:
+
+docker build -t clientvault .
+
+Run container:
+
+docker run -p 8080:8080 clientvault
+
+Or use Docker Compose:
+
+docker-compose up
+☸️ Deployment
+
+The project includes:
+
+Kubernetes manifests (k8s/)
+
+Terraform scripts (terraform/)
+
+Jenkins pipeline (Jenkinsfile)
+
+Use these for automated infrastructure provisioning and deployment.
+
+🧪 Testing
+
+Run tests with:
+
+mvn test
+👥 Contributors
+
+Team members contributing to the ClientVault project.
+
+📄 License
+
+This project is intended for educational and training purposes.
+
+⭐ Future Improvements
+
+Add authentication (JWT / OAuth2)
+
+API documentation (Swagger/OpenAPI)
+
+Validation and error handling improvements
+
+Monitoring and logging
+
+Frontend integration
