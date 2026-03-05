@@ -14,12 +14,17 @@ spec:
     metadata:
       labels:
         app: clientvault
+      annotations:  # <<< ADD THESE ANNOTATIONS FOR PROMETHEUS
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
     spec:
       containers:
         - name: clientvault-container
           image: durksie/clientvault-app:latest
           ports:
             - containerPort: 8080
+              name: http  # <<< ADD NAME FOR THE PORT (important for ServiceMonitor)
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom:
@@ -46,6 +51,13 @@ spec:
                 configMapKeyRef:
                   name: app-config
                   key: SPRING_JPA_SHOW_SQL
+            # <<< ADD THESE ENV VARIABLES FOR ACTUATOR METRICS
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "health,info,prometheus"
+            - name: MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
+              value: "true"
+            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+              value: "true"
           resources:
             requests:
               memory: "512Mi"
