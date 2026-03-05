@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: clientvault-monitor
+  namespace: monitoring  # Must be in the same namespace as Prometheus
+  labels:
+    release: prometheus  # This must match your Prometheus release name
+spec:
+  selector:
+    matchLabels:
+      app: clientvault  # This selects your service by its labels
+  endpoints:
+    - port: http  # This must match the port name in your Service
+      path: /actuator/prometheus
+      interval: 15s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+      - clientvault  # Only look in the clientvault namespace
