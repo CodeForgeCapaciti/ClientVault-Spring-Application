@@ -8,7 +8,7 @@ data:
   LOG_LEVEL: "info"
   SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-service:5432/client_vault"
   SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
-  SPRING_JPA_SHOW_SQL:
+  SPRING_JPA_SHOW_SQL: "true"
 
 
 
