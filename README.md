@@ -1,7 +1,3 @@
-Here’s a professional, comprehensive, and GitHub-ready **README.md** update for the full **ClientVault project**, integrating all weeks, DevOps, monitoring, logging, and deployment details:
-
----
-
 # ClientVault – Java Spring Boot Microservices Application
 
 **Month 4: DevOps – Java Microservices Deployment**
